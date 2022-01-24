@@ -1,0 +1,29 @@
+{
+  "name": "» BahnStats",
+  "version": "Beta » 0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flixxgamez/bahn-stats.git"
+  },
+  "keywords": [
+    "hafas"
+  ],
+  "author": "flixx",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flixxgamez/bahn-stats/issues"
+  },
+  "homepage": "https://github.com/flixxgamez/bahn-stats#readme",
+  "dependencies": {
+    "archiver": "^5.3.0",
+    "axios": "^0.24.0",
+    "db-hafas": "^5.0.2",
+    "discord.js": "^12.5.3",
+    "express": "^4.17.2"
+  }
+}
