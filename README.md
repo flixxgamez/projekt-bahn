@@ -1,6 +1,6 @@
 # » Projekt Bahn - automatischer Downloader 🚆
 
-## Willkommen auf der Repo-Seite für den den automatischer Downloader des BahnStats-Projektes
+## Willkommen auf der Repo-Seite für den den automatischer Downloader
 
 ### Installation vom Bot
 1. Lade dir Node.JS als herunter (https://nodejs.org/de/)
