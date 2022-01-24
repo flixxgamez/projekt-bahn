@@ -13,7 +13,7 @@ let i = 0;
 //Lädt den Discord-Client für den externen Log
 const DiscordJS = require('discord.js');
 const discord_client = new DiscordJS.Client();
-discord_client.login('OTMyMjk2NzU5NjUxMjA5MjE2.YeQ7BA.8aKrhUZ-wX1WyNPmDCxipwY57i0');
+discord_client.login('');
 
 let logChannel;
 discord_client.on('ready', () => {
