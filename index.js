@@ -3,7 +3,7 @@ const createHafas = require('db-hafas');
 const hafas_client = createHafas('flixx');
 
 //Lädt Stationsdaten
-const { stations } = require('./assets/stations');
+const { stations } = require('./assets/stations_berlin');
 
 //Setzt Parameter für das Intervall für Abfragen
 const difference = 3;
