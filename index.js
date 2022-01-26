@@ -3,7 +3,7 @@ const createHafas = require('db-hafas');
 const hafas_client = createHafas('flixx');
 
 //Lädt Stationsdaten
-const { stations } = require('./assets/stations_berlin');
+const { stations } = require('./assets/stations/stations_berlin');
 
 //Setzt Parameter für das Intervall für Abfragen
 const difference = 3;
@@ -45,8 +45,8 @@ setInterval(() => {
                 const stationName = station.name.toLowerCase().replaceAll(' ', '_');
                 const fileName = new Date().toISOString().replace(':', '_').slice(2, -8) + '.json';
 
-                fs.writeFile(`./daten/${stationName}/${fileName}`, fileData, () => {
-                    
+                fs.writeFile(`./daten/${stationName}/${fileName}`, fileData, (err) => {
+                    if (err) return console.log(err);
                 })
 
                 //Überprüft, ob im gegebenen Zeitraum Züge fahren
