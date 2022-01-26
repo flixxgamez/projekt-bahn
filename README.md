@@ -4,7 +4,7 @@
 
 ### Installation vom Bot
 1. Lade dir Node.JS als herunter (https://nodejs.org/de/)
-2. Kopier das Repo mit `git clone https://github.com/flixxgamez/bahn-stats`
+2. Kopier das Repo mit `git clone https://github.com/flixxgamez/projekt-bahn`
 3. Setze die Config nach dem Comment im Script
 4. Starte den Bot mit `node index.js`
 
