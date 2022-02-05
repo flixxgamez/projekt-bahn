@@ -1,102 +1,55 @@
-//Hafas-Abfrage
-const createHafas = require('db-hafas');
-const hafas_client = createHafas('flixx');
+//Code von flixx - Open Source » https://github.com/flixxgamez/projekt-bahn
+const createClient = require('db-hafas')
+const hafasClient = createClient('https://github.com/flixxgamez/projekt-bahn');
 
-//Lädt Stationsdaten
-const { stations } = require('./assets/stations/stations_berlin');
+//Für das Beispiel von Berlin (siehe unter station_data/stations_berlin). Kann durch Dateien mit gleichem Aufbau ausgetauscht werden.
+const { stationData } = require('./station_data/stations_berlin');
+console.log(`Projekt-Bahn 〣 Das Script wurde erfolgreich für die Stationsdaten "${stationData.regionName}" gestartet \n`);
 
-//Setzt Parameter für das Intervall für Abfragen
-const difference = 3;
-const check_interval = 60000 * difference;
+//Importiert weitere Loggingtools
+const DiscordJS = require('discord.js');
+const discordClient = new DiscordJS.Client();
+
+discordClient.login(''); //Hier eigenen Token für den Discord-Bot einfügen
+const { logStop } = require('./logging');
+
+//Loop die in einem Regelmäßigen Abstand Abfahrten abfragt, 'difference' gibt Abstand zwischen 2 Durchläufen in min an
+const difference = 1.5;
+const intervalDuration = difference * 60000 / stationData.stations.length;
 let i = 0;
 
-//Lädt den Discord-Client für den externen Log
-const DiscordJS = require('discord.js');
-const discord_client = new DiscordJS.Client();
-discord_client.login('');
-
-let logChannel;
-discord_client.on('ready', () => {
-    console.log('Discord » Der Bot wurde gestartet')
-    logChannel = discord_client.channels.cache.get('932655971489161236')
-});
-
-//Lädt das File-System für die Speicherung der Rohdaten
-const fs = require('fs');
-
-//Setzt das Intervall für die Abfragen
 setInterval(() => {
-    if(i != stations.length -1){
 
-        //Setzt Parameter für die abgefragte Station 
-        const station = {
-            name: stations[i].name,
-            eva: stations[i].eva,
-            region: stations[i].region,
-        }
-        console.log(`\n \nInfo » Der Bahnhof ${station.name} hat die EVA-Nummer ${station.eva}`);
-
-
-        //Stellt Anfrage an das HAFAS-System
-        hafas_client.departures(station.eva, {duration: difference, remarks: true, products: {tram: false, bus: false, ferry: false, subway: false, suburban: false}})
-            .then(dep_obj => {
-
-                const fileData = JSON.stringify(dep_obj);
-                const stationName = station.name.toLowerCase().replaceAll(' ', '_');
-                const fileName = new Date().toISOString().replace(':', '_').slice(2, -8) + '.json';
-
-                fs.writeFile(`./daten/${stationName}/${fileName}`, fileData, (err) => {
-                    if (err) return console.log(err);
-                })
-
-                //Überprüft, ob im gegebenen Zeitraum Züge fahren
-                if(dep_obj.length != 0) {
-                    console.log(`Abfahrten » Am Bahnhof ${station.name} fahren in den nächsten ${check_interval / 1000 / 60} Minuten folgende Züge: \n`);
-                } else {
-                    console.log(`Abfahrten » Am Bahnhof ${station.name} fahren in den nächsten ${check_interval / 1000 / 60} Minuten keine Züge \n`);
-                }
-
-                dep_obj.map(stop => {
-
-                    if(stop.line.productName != 'Bus') {
-
-                        if(stop.platform != null) {
-                            
-                            console.log(`Abfahrt » ${stop.line.name} (${stop.line.operator.name}) nach ${stop.direction} auf Gleis ${stop.platform} mit einer Verspätung von ${stop.delay / 60} Minute*n.`);
-                            const discord_Embed = new DiscordJS.MessageEmbed()
-                                .setAuthor('Projekt Bahn - Download', 'https://yannickbomhoff.de/media/bahn/icon.jpg')
-                                .setColor('#309fd1')
-                                .setTitle(`Information zu ${stop.line.name} » ${station.name} » ${stop.direction}`)
-                                .setTimestamp()
-                                .setFooter('Projekt-Leitung » flixx#9891')
-                                .addFields(
-                                    {name: 'Alias »', value: `${stop.line.productName} ${stop.line.fahrtNr}`},
-                                    {name: 'Echtzeitinformation »', value: `Heute auf Gleis ${stop.platform} mit einer Verspätung von ${stop.delay / 60} Minuten`},
-                                )
-                            logChannel.send(discord_Embed);
-                            
-                        } else {
-                            console.log(`Ausfall » ${stop.line.name} (${stop.line.operator.name}) nach ${stop.direction} fällt aus`);
-                            const discord_Embed = new DiscordJS.MessageEmbed()
-                                .setAuthor('Projekt Bahn - Download', 'https://yannickbomhoff.de/media/bahn/icon.jpg')
-                                .setColor('#EC0016')
-                                .setTitle(`Information zu ${stop.line.name} » ${station.name} » ${stop.direction}`)
-                                .setTimestamp()
-                                .setFooter('Projekt-Leitung » flixx#9891')
-                                .addFields(
-                                    {name: 'Alias »', value: `${stop.line.productName} ${stop.line.fahrtNr}`},
-                                    {name: 'Echtzeitinformation »', value: `Fällt heute aus`},
-                                )
-                            logChannel.send(discord_Embed);
-                        }
-                
-                    }
-                
-                })
-            })
-        i++;
-
-    } else {
-        i = 0;
+    //Lädt die relevanten Stationsdaten
+    const requestStation = {
+        name: stationData.stations[i].name,
+        eva: stationData.stations[i].eva,
+        region: stationData.stations[i].region,
     }
-}, check_interval / stations.length);
+
+    if(i === stationData.stations.length - 1) {i = 0} else i++
+
+
+    //Fragt die nächste Abfahrten an einem Bahnhof ab (ersetze "depatures" durch "arrivals" für Ankünfte)
+    //Art der Verkehrmittel, die angefragt werden sollen können individuel geändert werden
+    //Für mehr Infos siehe https://github.com/public-transport/hafas-client/blob/master/docs/departures.md
+    hafasClient.departures(requestStation.eva, {duration: difference, remarks: true, products: {tram: false, bus: false, ferry: false, subway: false, suburban: false}})
+        .catch(err => console.log(err))
+        .then(res => {
+
+            if(res.length != 0) {
+              
+                res.map(stop => {
+
+                    //"stop" stellt für den jeden Zug aus der Abfrage die Daten dar
+                    if(stop.line.mode === 'train') {
+                        logStop(DiscordJS, discordClient, stop, requestStation, stationData.discordID);
+                    }
+                                        
+                });
+
+            } 
+            
+        })
+
+}, intervalDuration)

@@ -1,24 +1,21 @@
 {
-  "name": "» BahnStats",
-  "version": "Beta » 0.1",
-  "description": "",
+  "name": "projekt-bahn",
+  "version": "1.0.0",
+  "description": "Ein automatisches Script zum Abrufen und speichern von Qualitätsdaten im Deutschen Schienenverkehr",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/flixxgamez/bahn-stats.git"
+    "url": "git+https://github.com/flixxgamez/projekt-bahn.git"
   },
-  "keywords": [
-    "hafas"
-  ],
   "author": "flixx",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/flixxgamez/bahn-stats/issues"
+    "url": "https://github.com/flixxgamez/projekt-bahn/issues"
   },
-  "homepage": "https://github.com/flixxgamez/bahn-stats#readme",
+  "homepage": "https://github.com/flixxgamez/projekt-bahn#readme",
   "dependencies": {
     "db-hafas": "^5.0.2",
     "discord.js": "^12.5.3"
