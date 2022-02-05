@@ -8,4 +8,4 @@
 3. Setze die Config nach dem Comment im Script
 4. Starte den Bot mit `node index.js`
 
-2021 © Projekt Bahn - flixx#9891
+2021 - 2022 © Projekt Bahn - flixx#9891
