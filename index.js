@@ -12,7 +12,7 @@ console.log(`Projekt-Bahn 〣 Das Script wurde erfolgreich für die Stationsdate
 const DiscordJS = require('discord.js');
 const discordClient = new DiscordJS.Client();
 
-discordClient.login('OTMyMjk2NzU5NjUxMjA5MjE2.YeQ7BA.U1XBQOyR9mKff_9VVpIC1kImfd0'); //Hier eigenen Token für den Discord-Bot einfügen
+discordClient.login(''); //Hier eigenen Token für den Discord-Bot einfügen
 const { logStation, logStop, saveData } = require('./logging');
 
 //Loop die in einem Regelmäßigen Abstand Abfahrten abfragt, 'difference' gibt Abstand zwischen 2 Durchläufen in min an
